@@ -5,9 +5,10 @@ import checkIcon from '../assets/icons/Check.png';
 
 interface TodoInputProps {
   addTask: (task: string) => void;
+  isDark: boolean;
 }
 
-export function TodoInput({ addTask, ...rest }: TodoInputProps) {
+export function TodoInput({ addTask, isDark, ...rest }: TodoInputProps) {
   const [task, setTask] = useState('');
 
   function handleAddNewTask() {
@@ -16,10 +17,11 @@ export function TodoInput({ addTask, ...rest }: TodoInputProps) {
   }
 
   return (
-    <View style={[styles.inputContainer, Platform.OS === 'ios' ? styles.inputIOSShadow : styles.inputAndroidShadow]}>
+    <View style={[styles.inputContainer, isDark && {backgroundColor: '#303030'}, Platform.OS === 'ios' ? styles.inputIOSShadow : styles.inputAndroidShadow]}>
       <TextInput 
-        style={styles.input} 
+        style={[styles.input, isDark && {backgroundColor: '#303030'}]} 
         placeholder="Adicionar novo todo..."
+        placeholderTextColor={isDark ? "#fff" : "#a09cb1"}
         returnKeyType="send"
         value={task}
         onChangeText={setTask}
@@ -28,7 +30,7 @@ export function TodoInput({ addTask, ...rest }: TodoInputProps) {
       <TouchableOpacity
         testID="add-new-task-button"
         activeOpacity={0.7}
-        style={styles.addButton}
+        style={[styles.addButton, isDark && {backgroundColor: '#181818'}]}
         onPress={handleAddNewTask}
       >
         <Image source={checkIcon} />
