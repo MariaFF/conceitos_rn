@@ -31,16 +31,17 @@ jobs:
       - name: Install dependencies
         run: 
           yarn
+      - run: xcode-select -p
       - name: Install pod dependencies
         run:
           cd ios && pod install
       - name: Build app
         run:     
-          xcodebuild -workspace myapp.xcworkspace -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
-          xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
-          mv myapp.ipa ../myapp.ipa
+          xcodebuild -workspace conceitos_rn.xcworkspace -scheme conceitos_rn archive -archivePath conceitos_rn.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./conceitos_rn.xcarchive -exportPath . -exportOptionsPlist conceitos_rn/Info.plist
+          mv conceitos_rn.ipa ../conceitos_rn.ipa
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: myapp.ipa
+          name: conceitos_rn.ipa
           path: ios/build/
