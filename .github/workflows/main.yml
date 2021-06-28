@@ -3,11 +3,12 @@ on:
   push:
     branches: [main]
 jobs:
-  build:
+        
+  build-android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-
+     
       - name: Install dependencies
         run: yarn
         
@@ -22,3 +23,24 @@ jobs:
         with:
           name: release
           path: android/app/build/outputs/apk/release/app-release.apk
+          
+  build-ios:
+    runs-on: [self-hosted, macos]
+    steps: 
+      - uses: actions/checkout@v1
+      - name: Install dependencies
+        run: 
+          yarn
+      - name: Install pod dependencies
+        run:
+          cd ios && pod install
+      - name: Build app
+        run:     
+          xcodebuild -workspace myapp.xcworkspace -scheme myapp archive -archivePath myapp.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./myapp.xcarchive -exportPath . -exportOptionsPlist myapp/Info.plist
+          mv myapp.ipa ../myapp.ipa
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: myapp.ipa
+          path: ios/build/
